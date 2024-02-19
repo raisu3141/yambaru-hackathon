@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "198771364890",
+    "project_id": "mic-factory",
+    "storage_bucket": "mic-factory.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198771364890:android:4f46a3bfc2de7ae9272da3",
+        "android_client_info": {
+          "package_name": "com.example.mic_factory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqLIvf6YZe08a_JADKTbF4N1qldvJI7yE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
