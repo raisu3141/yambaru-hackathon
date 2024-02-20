@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+import 'package:mic_factory/pages/home_page.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: '沖縄高専(非)公式アプリ',
       theme: ThemeData(
         // This is the theme of your application.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: '沖縄高専(非)公式アプリ'),
@@ -42,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
 
   final _pageWidgets = <Widget>[
-    const Text('Home'),
+    HomePage(),
     const Text('Timeline'),
     const Text('Account'),
     const Text('Map'),
@@ -87,6 +89,3 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 }
-
-
- 
