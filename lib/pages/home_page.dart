@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mic_factory/pages/timetable_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -11,7 +12,7 @@ class HomePage extends StatelessWidget {
             Column(
               children: [
                 const Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(20.0),
                   child: Image(
                       image: AssetImage('assets/images/nitokc_main_logo.png')),
                 ),
@@ -68,7 +69,12 @@ class HomePage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () { //タップしたら時間割画面に遷移
+                                  Navigator.push(
+                                    context, 
+                                    MaterialPageRoute(builder: (context) => Timetable() ),
+                                  );
+                                },
                               ),
                               const SizedBox(
                                 width: 20,
