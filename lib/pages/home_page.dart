@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,13 +13,13 @@ class HomePage extends StatelessWidget {
             Column(
               children: [
                 const Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(20.0),
                   child: Image(
                       image: AssetImage('assets/images/nitokc_main_logo.png')),
                 ),
                 Container(
                   alignment: Alignment.center,
-                  color: Color(0xFF094D9E),
+                  color: const Color(0xFF094D9E),
                   width: double.infinity,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
@@ -40,10 +42,9 @@ class HomePage extends StatelessWidget {
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10) //こちらを適用
-                                      ),
-                                  backgroundColor: Color(0xFFFFFFFF), //背景色
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: const Color(0xFFFFFFFF),
                                 ),
                                 child: const Padding(
                                   padding: EdgeInsets.all(10.0),
@@ -76,10 +77,9 @@ class HomePage extends StatelessWidget {
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10) //こちらを適用
-                                      ),
-                                  backgroundColor: Color(0xFFFFFFFF), //背景色
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: const Color(0xFFFFFFFF),
                                 ),
                                 child: const Padding(
                                   padding: EdgeInsets.all(10.0),
@@ -117,7 +117,7 @@ class HomePage extends StatelessWidget {
                   height: 20,
                 ),
                 Container(
-                  color: Color(0xFF66BD44),
+                  color: const Color(0xFF66BD44),
                   width: double.infinity,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
@@ -137,10 +137,9 @@ class HomePage extends StatelessWidget {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(10) //こちらを適用
-                                  ),
-                              backgroundColor: Color(0xFFFFFFFF), //背景色
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              backgroundColor: const Color(0xFFFFFFFF),
                             ),
                             child: const Padding(
                               padding: EdgeInsets.all(10.0),
