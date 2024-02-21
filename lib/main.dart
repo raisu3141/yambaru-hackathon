@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
 
   final _pageWidgets = <Widget>[
-    HomePage(),
+    const HomePage(),
     const Text('Timeline'),
     const Text('Account'),
     const Text('Map'),
