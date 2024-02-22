@@ -70,7 +70,7 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () { //タップすると時間割ページに遷移
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context, 
                                     MaterialPageRoute(builder: (context) => Timetable() ),
                                   );
