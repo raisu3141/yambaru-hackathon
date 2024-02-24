@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -44,7 +45,7 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
 
 
 
-    return Scaffold(
+    return Scaffold (
       appBar: AppBar(
         bottom: TabBar(
           controller: _tabController,
@@ -198,65 +199,65 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    showsubject('応用物理'),
+                    showsubject('101'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    showsubject('102'),
                     SizedBox(height: 10,),
-                    showsubject('応用物理'),
+                    showsubject('103'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    showsubject('104'),
                   ],
                 ),
                 SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    showsubject('応用物理'),
+                    // showsubject('201'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    // showsubject('202'),
                     SizedBox(height: 10,),
-                    showsubject('応用物理'),
+                    // showsubject('203'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    // showsubject('204'),
                   ],
                 ),
                 SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    showsubject('応用物理'),
+                    // showsubject('301'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    // showsubject('302'),
                     SizedBox(height: 10,),
-                    showsubject('応用物理'),
+                    // showsubject('303'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    // showsubject('304'),
                   ],
                 ),
                 SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    showsubject('応用物理'),
+                    // showsubject('401'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    // showsubject('402'),
                     SizedBox(height: 10,),
-                    showsubject('応用物理'),
+                    // showsubject('403'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    // showsubject('404'),
                   ],
                 ),
                 SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    showsubject('応用物理'),
+                    // showsubject('501'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    // showsubject('502'),
                     SizedBox(height: 10,),
-                    showsubject('応用物理'),
+                    // showsubject('503'),
                     SizedBox(height: 2,),
-                    showsubject('応用物理'),
+                    // showsubject('504'),
                   ],
                 ),
               ],
@@ -266,45 +267,106 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
         ],
       ),
     );
-
   }
 
-  Widget showsubject(String text){
-    return Container(
-      child: ElevatedButton(
-        child:  Padding(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          child: Column(
-            children: [
-              Text(
-                '$text',
-                style: TextStyle(
-                  color: Color(0xFF094D9E),
-                  fontWeight: FontWeight.bold,
+  Widget showsubject(String period) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: getSubjectName('$period'),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // ローディング中の表示
+        } else if (snapshot.hasError) {
+          print('Error: ${snapshot.error}');
+          return Container(
+            child: Text('Er'),
+          ); // エラーが発生した場合の表示
+        } else {
+          DocumentSnapshot subjectDoc = snapshot.data!;
+          String name = subjectDoc['name'].toString(); //subjectのnameを格納
+          String teacher1 = subjectDoc['teacher1'].toString(); 
+          String teacher2 = subjectDoc['teacher2'].toString(); 
+          String roomname = subjectDoc['roomname'].toString();
+
+          return Container(
+            child: ElevatedButton(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                child: Column(
+                  children: [
+                    Text(
+                      '$name',
+                      style: TextStyle(
+                        color: Color(0xFF094D9E),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 3,
               ),
-            ],
-          ),
-        ),
-        style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(10) 
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-            backgroundColor: Color(0xFFFFFFFF), //背景色
-            side: BorderSide(
-              color: Colors.black,
-              width: 1,
+                backgroundColor: Color(0xFFFFFFFF), //背景色
+                side: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                padding: EdgeInsets.zero,
+                minimumSize: Size(60, 100),
+                maximumSize: Size(60, 100),
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('$name'),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text('教室：$roomname'),
+                          Text('先生：$teacher1, $teacher2'),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Jump',
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Close',
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-            
-            padding: EdgeInsets.zero,
-            minimumSize: Size(60, 100),
-            maximumSize: Size(60, 100),
-        ),
-        onPressed: (){},
-      ),
+          );
+        }
+      },
     );
+  }
+
+  Future<DocumentSnapshot> getSubjectName(String timetableValue) async {
+    // Firestoreからtimetableコレクションのドキュメントを取得
+    DocumentSnapshot timetableDoc =
+        await FirebaseFirestore.instance.collection('timetable').doc('periods').get();
+
+
+    // timetableコレクション内のperiodsフィールドから該当するsubjectsの参照を取得
+    DocumentReference subjectRef = timetableDoc[timetableValue];
+
+    // subjectのドキュメントを取得して返す
+    return subjectRef.get();
   }
 }
