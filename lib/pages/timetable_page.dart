@@ -212,52 +212,52 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // showsubject('201'),
+                    showsubject('201'),
                     SizedBox(height: 2,),
-                    // showsubject('202'),
+                    showsubject('202'),
                     SizedBox(height: 10,),
-                    // showsubject('203'),
+                    showsubject('203'),
                     SizedBox(height: 2,),
-                    // showsubject('204'),
+                    showsubject('204'),
                   ],
                 ),
                 SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // showsubject('301'),
+                    showsubject('301'),
                     SizedBox(height: 2,),
-                    // showsubject('302'),
+                    showsubject('302'),
                     SizedBox(height: 10,),
-                    // showsubject('303'),
+                    showsubject('303'),
                     SizedBox(height: 2,),
-                    // showsubject('304'),
+                    showsubject('304'),
                   ],
                 ),
                 SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // showsubject('401'),
+                    showsubject('401'),
                     SizedBox(height: 2,),
-                    // showsubject('402'),
+                    showsubject('402'),
                     SizedBox(height: 10,),
-                    // showsubject('403'),
+                    showsubject('403'),
                     SizedBox(height: 2,),
-                    // showsubject('404'),
+                    showsubject('404'),
                   ],
                 ),
                 SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // showsubject('501'),
+                    showsubject('501'),
                     SizedBox(height: 2,),
-                    // showsubject('502'),
+                    showsubject('502'),
                     SizedBox(height: 10,),
-                    // showsubject('503'),
+                    showsubject('503'),
                     SizedBox(height: 2,),
-                    // showsubject('504'),
+                    showsubject('504'),
                   ],
                 ),
               ],
@@ -298,9 +298,10 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                       style: TextStyle(
                         color: Color(0xFF094D9E),
                         fontWeight: FontWeight.bold,
+                        fontSize: 14,
                       ),
                       textAlign: TextAlign.center,
-                      maxLines: 3,
+                      maxLines: 4,
                     ),
                   ],
                 ),
@@ -322,12 +323,33 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text('$name'),
+                    title: Text(
+                      '$name',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     content: SingleChildScrollView(
                       child: Column(
                         children: [
-                          Text('教室：$roomname'),
-                          Text('先生：$teacher1, $teacher2'),
+                          Text(
+                            '教室：$roomname',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          Text(
+                            '先生：$teacher1',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),                          
+                          ),
+                          Text(
+                            '$teacher2',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),                          
+                          ),
                         ],
                       ),
                     ),
