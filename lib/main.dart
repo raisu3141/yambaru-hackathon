@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
       const Text('Timeline'),
       const Text('Account'),
       const Text('Timetable'),
-      MapPage(),
+      const MapPage(),
     ];
   }
 
@@ -68,7 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pageWidgets.elementAt(_currentIndex),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: /*_currentIndex == 4
+          ? null
+          :*/
+          BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           const BottomNavigationBarItem(
