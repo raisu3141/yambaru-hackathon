@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mic_factory/pages/timetable_page.dart';
 
 class HomePage extends StatelessWidget {
   final Function(int) onDataSend;
@@ -71,7 +72,12 @@ class HomePage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () { //タップすると時間割ページに遷移
+                                  Navigator.pushReplacement(
+                                    context, 
+                                    MaterialPageRoute(builder: (context) => Timetable() ),
+                                  );
+                                },
                               ),
                               const SizedBox(
                                 width: 20,

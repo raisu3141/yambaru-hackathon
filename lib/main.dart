@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mic_factory/pages/timetable_page.dart';
+import 'package:mic_factory/pages/twitter_page.dart';
 import 'firebase_options.dart';
 
 import 'package:mic_factory/pages/home_page.dart';
@@ -63,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _currentIndex = data;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
