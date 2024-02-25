@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
@@ -7,15 +6,31 @@ class MapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const Color vacantColor = Color(0xFF66BD44);
-    const Color occupiedColor = Color(0xfffff82c4);
+    const Color occupiedColor = Color(0xFFFF82C4);
     const Color unavailableColor = Color(0xFFA1AEBE);
 
     return Scaffold(
+      floatingActionButton: SizedBox(
+        width: 220.0,
+        height: 100.0,
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          splashColor: Colors.transparent, // 波紋効果を透明に
+          highlightElevation: 0.0,
+          child: const Image(
+            image: AssetImage('assets/images/notes.png'),
+            width: double.infinity,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(
-              height: 50.0,
+              height: 100.0,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
