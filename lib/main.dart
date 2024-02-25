@@ -6,6 +6,7 @@ import 'package:mic_factory/pages/twitter_page.dart';
 import 'firebase_options.dart';
 
 import 'package:mic_factory/pages/home_page.dart';
+import 'package:mic_factory/pages/map_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,20 +46,35 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
 
-  final _pageWidgets = <Widget>[
-    HomePage(),
-    TwitterClone(),
-    const Text('Account'),
-    const Text('Map'),
-    Timetable(),
-  ];
+  List<Widget> _pageWidgets = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageWidgets = [
+      HomePage(onDataSend: onDataReceived),
+      const Text('Timeline'),
+      const Text('Account'),
+      const Text('Timetable'),
+      const MapPage(),
+    ];
+  }
+
+  void onDataReceived(int data) {
+    setState(() {
+      _currentIndex = data;
+    });
+  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pageWidgets.elementAt(_currentIndex),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: /*_currentIndex == 4
+          ? null
+          :*/
+          BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           const BottomNavigationBarItem(
@@ -70,9 +86,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 64, height: 64), // selected状態の画像
             label: '',
           ), // ラベル
-          const BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
           const BottomNavigationBarItem(
               icon: Icon(Icons.calendar_month), label: 'Timetable'),
+          const BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
         ],
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
@@ -80,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
         fixedColor: const Color(0xFF66BD44),
         backgroundColor: const Color(0xFFEEEEEE),
         unselectedItemColor: const Color(0xFFA1AEBE),
-        showUnselectedLabels: true, // 選択されていないラベルを非表示
-        showSelectedLabels: true, //
+        showUnselectedLabels: true,
+        showSelectedLabels: true,
       ),
     );
   }
