@@ -21,27 +21,27 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
     // 最初に時刻を取得
     currentTime = DateTime.now();
     // 1分ごとに時刻を更新
-    Timer.periodic(Duration(minutes: 1), (timer) {
+    Timer.periodic(const Duration(minutes: 1), (timer) {
       setState(() {
         currentTime = DateTime.now();
       });
     });
 
-     _tabController = TabController(length: 2, vsync: this); 
+     _tabController = TabController(length: 2, vsync: this);
 
   }
 
   @override
 
     Widget build(BuildContext context) {
-    DateTime now_jst = currentTime.add(Duration(hours: 9)); //現在時刻を取得
+    DateTime nowJst = currentTime.add(const Duration(hours: 9)); //現在時刻を取得
 
-    String formattedHour = '${now_jst.hour}'.padLeft(2, '0');
-    String formattedMinute = '${now_jst.minute}'.padLeft(2, '0');
+    String formattedHour = '${nowJst.hour}'.padLeft(2, '0');
+    String formattedMinute = '${nowJst.minute}'.padLeft(2, '0');
     String formattedTime = '$formattedHour:$formattedMinute'; //string型にフォーマット
 
     List<String> weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-    String now_weekday = weekdays[now_jst.weekday % 7]; // 今日の曜日を取得
+    String nowWeekday = weekdays[nowJst.weekday % 7]; // 今日の曜日を取得
 
 
 
@@ -49,7 +49,7 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
       appBar: AppBar(
         bottom: TabBar(
           controller: _tabController,
-          tabs:[
+          tabs:const [
             Tab(text:'時間割'),
             Tab(text: '科目'),
           ]
@@ -61,12 +61,12 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
           Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 16,),
+            const SizedBox(height: 16,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '$formattedTime $now_weekday', //現在時刻と曜日を表示
+                  '$formattedTime $nowWeekday', //現在時刻と曜日を表示
                   style: const TextStyle(
                     fontSize: 48,
                   ),
@@ -75,21 +75,21 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
             ),
             Center(
               child: Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
                     Row(
                       children: [
                         Image.asset('assets/images/account_icon_selected.png',
                         width: 64, height: 64), 
-                        SizedBox(width: 8,),
+                        const SizedBox(width: 8,),
                         Container(
-                          padding: EdgeInsets.fromLTRB(18, 4, 18, 4),
+                          padding: const EdgeInsets.fromLTRB(18, 4, 18, 4),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Row(
+                          child: const Row(
                             children: [
                               Text(
                                 '月',
@@ -146,17 +146,17 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
             ),
             Row(
               children: [
-                Row(children: [Text(''), SizedBox(width: 21,)],),
+                const Row(children: [Text(''), SizedBox(width: 21,)],),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(16, 35, 16, 35),
+                      padding: const EdgeInsets.fromLTRB(16, 35, 16, 35),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Column(
+                      child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -195,68 +195,68 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                     ),
                   ],
                 ),
-                SizedBox(width: 14,),
+                const SizedBox(width: 14,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     showsubject('101'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('102'),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     showsubject('103'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('104'),
                   ],
                 ),
-                SizedBox(width: 2,),
+                const SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     showsubject('201'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('202'),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     showsubject('203'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('204'),
                   ],
                 ),
-                SizedBox(width: 2,),
+                const SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     showsubject('301'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('302'),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     showsubject('303'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('304'),
                   ],
                 ),
-                SizedBox(width: 2,),
+                const SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     showsubject('401'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('402'),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     showsubject('403'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('404'),
                   ],
                 ),
-                SizedBox(width: 2,),
+                const SizedBox(width: 2,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     showsubject('501'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('502'),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     showsubject('503'),
-                    SizedBox(height: 2,),
+                    const SizedBox(height: 2,),
                     showsubject('504'),
                   ],
                 ),
@@ -271,31 +271,97 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
 
   Widget showsubject(String period) {
     return FutureBuilder<DocumentSnapshot>(
-      future: getSubjectName('$period'),
+      future: getSubjectName(period),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // ローディング中の表示
+          return const CircularProgressIndicator(); // ローディング中の表示
         } else if (snapshot.hasError) {
           print('Error: ${snapshot.error}');
           return Container(
-            child: Text('Er'),
+            child: const Text('Er'),
           ); // エラーが発生した場合の表示
         } else {
           DocumentSnapshot subjectDoc = snapshot.data!;
           String name = subjectDoc['name'].toString(); //subjectのnameを格納
-          String teacher1 = subjectDoc['teacher1'].toString(); 
-          String teacher2 = subjectDoc['teacher2'].toString(); 
+          String teacher1 = subjectDoc['teacher1'].toString();
+          String teacher2 = subjectDoc['teacher2'].toString();
           String roomname = subjectDoc['roomname'].toString();
 
           return Container(
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                backgroundColor: const Color(0xFFFFFFFF), //背景色
+                side: const BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                padding: EdgeInsets.zero,
+                minimumSize: const Size(60, 100),
+                maximumSize: const Size(60, 100),
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(
+                      name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            '教室：$roomname',
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          Text(
+                            '先生：$teacher1',
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          Text(
+                            teacher2,
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Jump',
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          'Close',
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: Column(
                   children: [
                     Text(
-                      '$name',
-                      style: TextStyle(
+                      name,
+                      style: const TextStyle(
                         color: Color(0xFF094D9E),
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -306,72 +372,6 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                   ],
                 ),
               ),
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                backgroundColor: Color(0xFFFFFFFF), //背景色
-                side: BorderSide(
-                  color: Colors.black,
-                  width: 1,
-                ),
-                padding: EdgeInsets.zero,
-                minimumSize: Size(60, 100),
-                maximumSize: Size(60, 100),
-              ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text(
-                      '$name',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    content: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Text(
-                            '教室：$roomname',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          Text(
-                            '先生：$teacher1',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),                          
-                          ),
-                          Text(
-                            '$teacher2',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),                          
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Jump',
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          'Close',
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
             ),
           );
         }
