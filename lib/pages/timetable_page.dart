@@ -264,11 +264,6 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
             ),
           ],
         ),
-        Column(
-          children: [
-            Text('Test'),
-          ],
-        ),
         ],
       ),
     );
