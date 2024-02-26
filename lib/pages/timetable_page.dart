@@ -294,12 +294,22 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
           SingleChildScrollView(
             child: Column(
               children: [
-                Text('このテキスト削除してここに追加'),
+                showsubjectdata('hoge'),
               ]
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget showsubjectdata(String subjectid){
+    return Container(
+      child: Row(
+        children: [
+          Text('$subjectid')
+        ],
+      )
     );
   }
 
