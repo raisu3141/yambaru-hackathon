@@ -294,7 +294,7 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
           SingleChildScrollView(
             child: Column(
               children: [
-                Text('Test'),
+                Text('このテキスト削除してここに追加'),
               ]
             ),
           ),
@@ -305,7 +305,7 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
 
   Widget showsubject(String period) {
     return FutureBuilder<DocumentSnapshot>(
-      future: getSubjectName(period),
+      future: getPeriodData(period),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator(); // ローディング中の表示
@@ -416,7 +416,7 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
     );
   }
 
-  Future<DocumentSnapshot> getSubjectName(String timetableValue) async {
+  Future<DocumentSnapshot> getPeriodData(String timetableValue) async {
     // Firestoreからtimetableコレクションのドキュメントを取得
     DocumentSnapshot timetableDoc =
         await FirebaseFirestore.instance.collection('timetable').doc('periods').get();
