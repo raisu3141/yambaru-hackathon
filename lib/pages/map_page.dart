@@ -1,4 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
@@ -8,6 +13,7 @@ class MapPage extends StatelessWidget {
     const Color vacantColor = Color(0xFF66BD44);
     const Color occupiedColor = Color(0xFFFF82C4);
     const Color unavailableColor = Color(0xFFA1AEBE);
+    
 
     return Scaffold(
       floatingActionButton: SizedBox(
@@ -360,7 +366,6 @@ class Room {
   final int width;
   final int height;
   final Color color;
-
   final int roomid;
 
   Room({
@@ -371,6 +376,7 @@ class Room {
     required this.color,
     required this.roomid,
   });
+
 
   Widget build() {
     return Container(
@@ -402,5 +408,44 @@ class Room {
         ),
       ),
     );
+  }
+
+  bool isNowused(int roomid) {
+    int period = getCurrentPeriod(); //現在何限目か取得
+
+
+
+    return true;
+  }
+
+  Future<DocumentSnapshot> getSubjectName(int roomid) async {
+    // Firestoreからtimetableコレクションのドキュメントを取得
+    DocumentSnapshot timetableDoc =
+        await FirebaseFirestore.instance.collection('timetable').doc('periods').get();
+
+
+    // timetableコレクション内のperiodsフィールドから該当するsubjectsの参照を取得
+    DocumentReference subjectRef = timetableDoc[timetableValue];
+
+    // subjectのドキュメントを取得して返す
+    return subjectRef.get();
+  }
+
+  int getCurrentPeriod() {
+    DateTime now = DateTime.now();
+    int hour = now.hour;
+    int minute = now.minute;
+
+    if ((hour == 8 && minute >= 50) || (hour == 9 && minute <= 20)) {
+      return 1;
+    } else if ((hour == 10 && minute >= 30) || (hour == 11 && minute <= 59)) {
+      return 2;
+    } else if ((hour == 13 && minute >= 10) || (hour == 14 && minute <= 40)) {
+      return 3;
+    } else if ((hour == 14 && minute >= 50) || (hour == 16 && minute <= 20)) {
+      return 4;
+    } else {
+      return 0;
+    }
   }
 }
