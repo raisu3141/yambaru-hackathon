@@ -333,7 +333,10 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                     children: [
                       Column(
                         children: [
-                          Text('$subjectid: \n\n'),
+                          // Text('$subjectid: \n\n'),
+                          Text('$subjectid: '),
+                          Text(''),
+                          Text(''),
                         ],
                       ),
                       Column(
