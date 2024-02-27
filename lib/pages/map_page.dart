@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
     const Color vacantColor = Color(0xFF66BD44);
     const Color occupiedColor = Color(0xFFFF82C4);
     const Color unavailableColor = Color(0xFFA1AEBE);
+        late DateTime currentTime;
+    // DateTime nowJst = currentTime.add(const Duration(hours: 9));
 
     return Scaffold(
       floatingActionButton: SizedBox(
@@ -48,6 +51,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: unavailableColor,
+                      roomid: 0101,
                     ).build(),
                     Room(
                       name: '研究室1-2',
@@ -55,6 +59,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: vacantColor,
+                      roomid: 0102,
                     ).build(),
                     Room(
                       name: '研究室1-3',
@@ -62,6 +67,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: vacantColor,
+                      roomid: 0103,
                     ).build(),
                     Room(
                       name: '研究室1-4',
@@ -69,6 +75,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: occupiedColor,
+                      roomid: 0104,
                     ).build(),
                     Room(
                       name: '研究室1-5',
@@ -76,6 +83,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: occupiedColor,
+                      roomid: 0105,
                     ).build(),
                     Room(
                       name: '研究室1-6',
@@ -83,6 +91,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: vacantColor,
+                      roomid: 0106,
                     ).build(),
                     Room(
                       name: '研究室1-7',
@@ -90,6 +99,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: vacantColor,
+                      roomid: 0107,
                     ).build(),
                     Room(
                       name: '研究室1-8',
@@ -97,6 +107,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: vacantColor,
+                      roomid: 0108,
                     ).build(),
                     Room(
                       name: '研究室1-9',
@@ -104,6 +115,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: occupiedColor,
+                      roomid: 0109,
                     ).build(),
                     const SizedBox(
                       height: 50.0,
@@ -114,6 +126,7 @@ class MapPage extends StatelessWidget {
                       width: 130,
                       height: 100,
                       color: occupiedColor,
+                      roomid: 1101,
                     ).build(),
                     Room(
                       name: '研究室1-2',
@@ -121,6 +134,7 @@ class MapPage extends StatelessWidget {
                       width: 130,
                       height: 100,
                       color: vacantColor,
+                      roomid: 1102,
                     ).build(),
                     const SizedBox(
                       height: 150.0,
@@ -131,6 +145,7 @@ class MapPage extends StatelessWidget {
                       width: 130,
                       height: 100,
                       color: vacantColor,
+                      roomid: 1103,
                     ).build(),
                     Room(
                       name: '研究室1-4',
@@ -138,6 +153,7 @@ class MapPage extends StatelessWidget {
                       width: 130,
                       height: 100,
                       color: vacantColor,
+                      roomid: 1104,
                     ).build(),
                     const SizedBox(
                       height: 50.0,
@@ -148,6 +164,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: occupiedColor,
+                      roomid: 0110,
                     ).build(),
                     Room(
                       name: '研究室1-11',
@@ -155,6 +172,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: unavailableColor,
+                      roomid: 0111,
                     ).build(),
                     Room(
                       name: '研究室1-12',
@@ -162,6 +180,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: vacantColor,
+                      roomid: 0112,
                     ).build(),
                     Room(
                       name: '研究室1-13',
@@ -169,6 +188,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: occupiedColor,
+                      roomid: 0113,
                     ).build(),
                     Room(
                       name: '研究室1-14',
@@ -176,6 +196,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: vacantColor,
+                      roomid: 0114,
                     ).build(),
                     Room(
                       name: '研究室1-15',
@@ -183,6 +204,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: unavailableColor,
+                      roomid: 0115,
                     ).build(),
                     Room(
                       name: '研究室1-16',
@@ -190,6 +212,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: occupiedColor,
+                      roomid: 0116,
                     ).build(),
                     Room(
                       name: '研究室1-17',
@@ -197,6 +220,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: unavailableColor,
+                      roomid: 0117,
                     ).build(),
                     Room(
                       name: '研究室1-18',
@@ -204,6 +228,7 @@ class MapPage extends StatelessWidget {
                       width: 100,
                       height: 50,
                       color: vacantColor,
+                      roomid: 0118,
                     ).build(),
                   ],
                 ),
@@ -223,6 +248,7 @@ class MapPage extends StatelessWidget {
                       width: 140,
                       height: 200,
                       color: vacantColor,
+                      roomid: 2101,
                     ).build(),
                     Room(
                       name: '準備室1',
@@ -230,6 +256,7 @@ class MapPage extends StatelessWidget {
                       width: 140,
                       height: 50,
                       color: unavailableColor,
+                      roomid: 0,
                     ).build(),
                     Room(
                       name: '準備室2',
@@ -237,6 +264,7 @@ class MapPage extends StatelessWidget {
                       width: 140,
                       height: 50,
                       color: unavailableColor,
+                      roomid: 0,
                     ).build(),
                     Room(
                       name: 'ネットワーク演習室',
@@ -244,6 +272,7 @@ class MapPage extends StatelessWidget {
                       width: 140,
                       height: 200,
                       color: vacantColor,
+                      roomid: 2102,
                     ).build(),
                     const SizedBox(
                       height: 100,
@@ -254,6 +283,7 @@ class MapPage extends StatelessWidget {
                       width: 140,
                       height: 100,
                       color: unavailableColor,
+                      roomid: 0,
                     ).build(),
                     Room(
                       name: '創造工房',
@@ -261,6 +291,7 @@ class MapPage extends StatelessWidget {
                       width: 140,
                       height: 200,
                       color: vacantColor,
+                      roomid: 2103,
                     ).build(),
                     const SizedBox(
                       height: 50,
@@ -271,6 +302,7 @@ class MapPage extends StatelessWidget {
                       width: 140,
                       height: 200,
                       color: vacantColor,
+                      roomid: 0,
                     ).build(),
                     Row(
                       children: [
@@ -280,6 +312,7 @@ class MapPage extends StatelessWidget {
                           width: 70,
                           height: 100,
                           color: unavailableColor,
+                          roomid: 0,
                         ).build(),
                         Room(
                           name: '',
@@ -287,6 +320,7 @@ class MapPage extends StatelessWidget {
                           width: 70,
                           height: 100,
                           color: unavailableColor,
+                          roomid: 0,
                         ).build(),
                       ],
                     ),
@@ -296,6 +330,7 @@ class MapPage extends StatelessWidget {
                       width: 140,
                       height: 100,
                       color: vacantColor,
+                      roomid: 0,
                     ).build(),
                     Room(
                       name: '材料特性評価室',
@@ -303,6 +338,7 @@ class MapPage extends StatelessWidget {
                       width: 140,
                       height: 150,
                       color: vacantColor,
+                      roomid: 2104,
                     ).build(),
                   ],
                 ),
@@ -327,6 +363,7 @@ class Room {
   final int width;
   final int height;
   final Color color;
+  final int roomid;
 
   Room({
     required this.name,
@@ -334,6 +371,7 @@ class Room {
     required this.width,
     required this.height,
     required this.color,
+    required this.roomid,
   });
 
   Widget build() {
