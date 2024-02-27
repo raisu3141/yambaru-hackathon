@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -225,65 +226,65 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('101'),
+                        showtimetablesubject('101'),
                         const SizedBox(height: 2,),
-                        showsubject('102'),
+                        showtimetablesubject('102'),
                         const SizedBox(height: 10,),
-                        showsubject('103'),
+                        showtimetablesubject('103'),
                         const SizedBox(height: 2,),
-                        showsubject('104'),
+                        showtimetablesubject('104'),
                       ],
                     ),
                     const SizedBox(width: 2,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('201'),
+                        showtimetablesubject('201'),
                         const SizedBox(height: 2,),
-                        showsubject('202'),
+                        showtimetablesubject('202'),
                         const SizedBox(height: 10,),
-                        showsubject('203'),
+                        showtimetablesubject('203'),
                         const SizedBox(height: 2,),
-                        showsubject('204'),
+                        showtimetablesubject('204'),
                       ],
                     ),
                     const SizedBox(width: 2,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('301'),
+                        showtimetablesubject('301'),
                         const SizedBox(height: 2,),
-                        showsubject('302'),
+                        showtimetablesubject('302'),
                         const SizedBox(height: 10,),
-                        showsubject('303'),
+                        showtimetablesubject('303'),
                         const SizedBox(height: 2,),
-                        showsubject('304'),
+                        showtimetablesubject('304'),
                       ],
                     ),
                     const SizedBox(width: 2,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('401'),
+                        showtimetablesubject('401'),
                         const SizedBox(height: 2,),
-                        showsubject('402'),
+                        showtimetablesubject('402'),
                         const SizedBox(height: 10,),
-                        showsubject('403'),
+                        showtimetablesubject('403'),
                         const SizedBox(height: 2,),
-                        showsubject('404'),
+                        showtimetablesubject('404'),
                       ],
                     ),
                     const SizedBox(width: 2,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('501'),
+                        showtimetablesubject('501'),
                         const SizedBox(height: 2,),
-                        showsubject('502'),
+                        showtimetablesubject('502'),
                         const SizedBox(height: 10,),
-                        showsubject('503'),
+                        showtimetablesubject('503'),
                         const SizedBox(height: 2,),
-                        showsubject('504'),
+                        showtimetablesubject('504'),
                       ],
                     ),
                   ],
@@ -295,27 +296,26 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
           SingleChildScrollView(
             child: Column(
               children: [
-                showsubjectdata1('英語演習'),
-                showsubjectdata2('科学技術文書'),
-                showsubjectdata3('電子回路演習'),
-                showsubjectdata4('応用数学'),
-                showsubjectdata5('応用プログラミング'),
-                showsubjectdata6('ECP Ⅳ'),
-                showsubjectdata7('電磁気学'),
-                showsubjectdata8('特許法・法学'),
-                showsubjectdata9('人工知能'),
-                showsubjectdata10('情報通信工学実験'),
-                showsubjectdata11('情報通信総合演習'),
-                showsubjectdata12('制御工学Ⅱ'),
-                showsubjectdata13('通信工学Ⅰ'),
-                showsubjectdata14('応用物理'),
-                showsubjectdata15('スポーツ実技Ⅳ'),
-                showsubjectdata16('化学Ⅱ'),
-                showsubjectdata17('整備基礎Ⅰ'),
-                showsubjectdata18('処理信号'),
-                showsubjectdata19('インターンシップ'),
-                showsubjectdata20('地域文化論'),
-                showsubjectdata21('確率・統計'),
+                showsubjectdata('ECE'),
+                showsubjectdata('ELD'),
+                showsubjectdata('CE2'),
+                showsubjectdata('BM1'),
+                showsubjectdata('STW'),
+                showsubjectdata('PLJ'),
+                showsubjectdata('CE1'),
+                showsubjectdata('SP'),
+                showsubjectdata('AM'),
+                showsubjectdata('AI'),
+                showsubjectdata('APH'),
+                showsubjectdata('INT'),
+                showsubjectdata('AP1'),
+                showsubjectdata('ICE3'),
+                showsubjectdata('SP4'),
+                showsubjectdata('RCT'),
+                showsubjectdata('ECP4'),
+                showsubjectdata('CIC'),
+                showsubjectdata('CHE2'),
+                showsubjectdata('PS'),
               ]
             ),
           ),
@@ -324,1127 +324,84 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
     );
   }
 
-  Widget showsubjectdata1(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
+  Widget showsubjectdata(String subjectid){
 
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
+    return FutureBuilder(
+      future: getsubjectdata(subjectid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator(); // ローディング中の表示
+        } else if (snapshot.hasError) {
+          print('Error: ${snapshot.error}');
+          return Container(
+            child: const Text('Er'),
+          ); // エラーが発生した場合の表示
+        } else {
+          DocumentSnapshot subjectDoc = snapshot.data!;
+          String name = subjectDoc['name'].toString(); //subjectのnameを格納
+          String teacher1 = subjectDoc['teacher1'].toString();
+          String teacher2 = subjectDoc['teacher2'].toString();
+          String classroom = subjectDoc['roomname'].toString();
+          //先生の部屋
+          String senseiroom = '4-1';
+
+          return Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
+                SingleChildScrollView(
+                  child: Column(
                     children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
+                      SizedBox(height: 7),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1
+                          ),
+                          borderRadius: BorderRadius.circular(8)
+                        ),
+                        padding: EdgeInsets.all(15),
+                        child: Row(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text('$name: '),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  '研究室:$senseiroom'
+                                ),
+                                Text(
+                                  '講義室:$classroom'
+                                ),
+                                Text(
+                                  '担当:$teacher1'
+                                ),
+                                if (teacher2 != '')
+                                  Text(
+                                    '$teacher2'
+                                  )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
                     ],
                   ),
-                ),
-                SizedBox(height: 7)
+                ) 
               ],
-            ),
-          ) 
-        ],
-      )
+            )
+          );
+        }
+      }
     );
-  }
+  }  
 
-  Widget showsubjectdata2(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-
-    Widget showsubjectdata3(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-  Widget showsubjectdata4(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-  Widget showsubjectdata5(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-
-  Widget showsubjectdata6(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-
-  Widget showsubjectdata7(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-
-  Widget showsubjectdata8(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-
-  Widget showsubjectdata9(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-
-  Widget showsubjectdata10(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-
-  Widget showsubjectdata11(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-
-  Widget showsubjectdata12(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-
-  Widget showsubjectdata13(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-
-  Widget showsubjectdata14(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-
-  Widget showsubjectdata15(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-  
-   Widget showsubjectdata16(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-  Widget showsubjectdata17(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-  Widget showsubjectdata18(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-  
-
-  Widget showsubjectdata19(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-
-  Widget showsubjectdata20(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-
-  Widget showsubjectdata21(String subjectid){
-    //先生の名前
-    String sensei = '兼城 千波';
-    //教室の名前
-    String classroom = '1-1';
-    //先生の部屋
-    String senseiroom = '4-1';
-
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1
-                    ),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // Text('$subjectid: \n\n'),
-                          Text('$subjectid: '),
-                          Text(''),
-                          Text(''),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '研究室:$senseiroom\n講義室:$classroom\n担当:$sensei'
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7)
-              ],
-            ),
-          ) 
-        ],
-      )
-    );
-  }
-
-  Widget showsubject(String period) {
+  Widget showtimetablesubject(String period) {
     return FutureBuilder<DocumentSnapshot>(
       future: getPeriodData(period),
       builder: (context, snapshot) {
@@ -1555,6 +512,14 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
         }
       },
     );
+  }
+
+  Future<DocumentSnapshot> getsubjectdata(String subjectid) async {
+    DocumentSnapshot subjectdata = 
+        await FirebaseFirestore.instance.collection('subjects').doc(subjectid).get();
+
+    // 科目のドキュメントを取得して返す
+    return subjectdata;    
   }
 
   Future<DocumentSnapshot> getPeriodData(String timetableValue) async {
