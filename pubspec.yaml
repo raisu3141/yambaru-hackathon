@@ -39,6 +39,7 @@ dependencies:
   flame: ^1.16.0
   intl: ^0.18.1
   calendar_view: ^1.0.4
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -96,3 +97,9 @@ flutter:
     - assets/images/account_icon_selected.png
     - assets/images/nitokc_main_logo.png
     - assets/images/notes.png
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
+  adaptive_icon_background: "#FFFFFF"
