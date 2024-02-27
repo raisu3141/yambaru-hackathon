@@ -451,13 +451,13 @@ class Room {
     int hour = now.hour;
     int minute = now.minute;
 
-    if ((hour == 8 && minute >= 50) || (hour == 9 && minute <= 20)) {
+    if ((hour == 8 && minute >= 50) || (hour == 9) || (hour == 10 && minute <= 20)) {
       return 1;
     } else if ((hour == 10 && minute >= 30) || (hour == 11 && minute <= 59)) {
       return 2;
     } else if ((hour == 13 && minute >= 10) || (hour == 14 && minute <= 40)) {
       return 3;
-    } else if ((hour == 14 && minute >= 50) || (hour == 16 && minute <= 20)) {
+    } else if ((hour == 14 && minute >= 50) || (hour == 15) || (hour == 16 && minute <= 20)) {
       return 4;
     } else {
       return 0;
