@@ -421,4 +421,22 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
     // subjectのドキュメントを取得して返す
     return subjectRef.get();
   }
+
+  int getCurrentPeriod() {
+    DateTime now = DateTime.now().add(const Duration(hours: 9)); //現在時刻を取得
+    int hour = now.hour;
+    int minute = now.minute;
+
+    if ((hour == 8 && minute >= 50) || (hour == 9) || (hour == 10 && minute <= 20)) {
+      return 1;
+    } else if ((hour == 10 && minute >= 30) || (hour == 11 && minute <= 59)) {
+      return 2;
+    } else if ((hour == 13 && minute >= 10) || (hour == 14 && minute <= 40)) {
+      return 3;
+    } else if ((hour == 14 && minute >= 50) || (hour == 15) || (hour == 16 && minute <= 20)) {
+      return 4;
+    } else {
+      return 0;
+    }
+  }
 }

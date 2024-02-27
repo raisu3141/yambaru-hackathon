@@ -445,7 +445,6 @@ class Room {
     return subjectRef.get();
   }
 
-
   int getCurrentPeriod() {
     DateTime now = DateTime.now().add(const Duration(hours: 9)); //現在時刻を取得
     int hour = now.hour;
