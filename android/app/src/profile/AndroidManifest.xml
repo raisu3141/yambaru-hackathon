@@ -2,7 +2,7 @@
     android:installLocation="auto"
     android:enableOnBackInvokedCallback="true">
     <application
-        android:label="mic_factory"
+        android:label="NITOkC App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
