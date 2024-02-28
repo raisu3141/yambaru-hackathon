@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -49,6 +50,7 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
 
     List<String> weekdays = ['日', '月', '火', '水', '木', '金', '土'];
     String nowWeekday = weekdays[nowJst.weekday % 7]; // 今日の曜日を取得
+
 
 
 
@@ -231,65 +233,65 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('101'),
+                        showtimetablesubject('101'),
                         const SizedBox(height: 2,),
-                        showsubject('102'),
+                        showtimetablesubject('102'),
                         const SizedBox(height: 10,),
-                        showsubject('103'),
+                        showtimetablesubject('103'),
                         const SizedBox(height: 2,),
-                        showsubject('104'),
+                        showtimetablesubject('104'),
                       ],
                     ),
                     const SizedBox(width: 2,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('201'),
+                        showtimetablesubject('201'),
                         const SizedBox(height: 2,),
-                        showsubject('202'),
+                        showtimetablesubject('202'),
                         const SizedBox(height: 10,),
-                        showsubject('203'),
+                        showtimetablesubject('203'),
                         const SizedBox(height: 2,),
-                        showsubject('204'),
+                        showtimetablesubject('204'),
                       ],
                     ),
                     const SizedBox(width: 2,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('301'),
+                        showtimetablesubject('301'),
                         const SizedBox(height: 2,),
-                        showsubject('302'),
+                        showtimetablesubject('302'),
                         const SizedBox(height: 10,),
-                        showsubject('303'),
+                        showtimetablesubject('303'),
                         const SizedBox(height: 2,),
-                        showsubject('304'),
+                        showtimetablesubject('304'),
                       ],
                     ),
                     const SizedBox(width: 2,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('401'),
+                        showtimetablesubject('401'),
                         const SizedBox(height: 2,),
-                        showsubject('402'),
+                        showtimetablesubject('402'),
                         const SizedBox(height: 10,),
-                        showsubject('403'),
+                        showtimetablesubject('403'),
                         const SizedBox(height: 2,),
-                        showsubject('404'),
+                        showtimetablesubject('404'),
                       ],
                     ),
                     const SizedBox(width: 2,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showsubject('501'),
+                        showtimetablesubject('501'),
                         const SizedBox(height: 2,),
-                        showsubject('502'),
+                        showtimetablesubject('502'),
                         const SizedBox(height: 10,),
-                        showsubject('503'),
+                        showtimetablesubject('503'),
                         const SizedBox(height: 2,),
-                        showsubject('504'),
+                        showtimetablesubject('504'),
                       ],
                     ),
                   ],
@@ -298,14 +300,117 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                       ),
             ),
           ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                showsubjectdata('ECE'),
+                showsubjectdata('ELD'),
+                showsubjectdata('CE2'),
+                showsubjectdata('BM1'),
+                showsubjectdata('STW'),
+                showsubjectdata('PLJ'),
+                showsubjectdata('CE1'),
+                showsubjectdata('SP'),
+                showsubjectdata('AM'),
+                showsubjectdata('AI'),
+                showsubjectdata('APH'),
+                showsubjectdata('INT'),
+                showsubjectdata('AP1'),
+                showsubjectdata('ICE3'),
+                showsubjectdata('SP4'),
+                showsubjectdata('RCT'),
+                showsubjectdata('ECP4'),
+                showsubjectdata('CIC'),
+                showsubjectdata('CHE2'),
+                showsubjectdata('PS'),
+              ]
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget showsubject(String period) {
+  Widget showsubjectdata(String subjectid){
+
+    return FutureBuilder(
+      future: getsubjectdata(subjectid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator(); // ローディング中の表示
+        } else if (snapshot.hasError) {
+          print('Error: ${snapshot.error}');
+          return Container(
+            child: const Text('Er'),
+          ); // エラーが発生した場合の表示
+        } else {
+          DocumentSnapshot subjectDoc = snapshot.data!;
+          String name = subjectDoc['name'].toString(); //subjectのnameを格納
+          String teacher1 = subjectDoc['teacher1'].toString();
+          String teacher2 = subjectDoc['teacher2'].toString();
+          String classroom = subjectDoc['roomname'].toString();
+          //先生の部屋
+          String senseiroom = '4-1';
+
+          return Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 7),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1
+                          ),
+                          borderRadius: BorderRadius.circular(8)
+                        ),
+                        padding: EdgeInsets.all(15),
+                        child: Row(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text('$name: '),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  '研究室:$senseiroom'
+                                ),
+                                Text(
+                                  '講義室:$classroom'
+                                ),
+                                Text(
+                                  '担当:$teacher1'
+                                ),
+                                if (teacher2 != '')
+                                  Text(
+                                    '$teacher2'
+                                  )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ) 
+              ],
+            )
+          );
+        }
+      }
+    );
+  }  
+
+  Widget showtimetablesubject(String period) {
     return FutureBuilder<DocumentSnapshot>(
-      future: getSubjectName(period),
+      future: getPeriodData(period),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator(); // ローディング中の表示
@@ -419,7 +524,15 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
     );
   }
 
-  Future<DocumentSnapshot> getSubjectName(String timetableValue) async {
+  Future<DocumentSnapshot> getsubjectdata(String subjectid) async {
+    DocumentSnapshot subjectdata = 
+        await FirebaseFirestore.instance.collection('subjects').doc(subjectid).get();
+
+    // 科目のドキュメントを取得して返す
+    return subjectdata;    
+  }
+
+  Future<DocumentSnapshot> getPeriodData(String timetableValue) async {
     // Firestoreからtimetableコレクションのドキュメントを取得
     DocumentSnapshot timetableDoc =
         await FirebaseFirestore.instance.collection('timetable').doc('periods').get();
