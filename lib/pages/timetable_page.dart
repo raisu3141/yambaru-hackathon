@@ -2,10 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:mic_factory/pages/map_page.dart';
+
 
 
 class Timetable extends StatefulWidget {
-  const Timetable({super.key});
+  final Function(int, ) onDataSend;
+
+  const Timetable({Key? key, required this.onDataSend}) : super(key: key);
+  
 
   @override
   State<Timetable> createState() => _MyWidgetState();
@@ -14,6 +19,8 @@ class Timetable extends StatefulWidget {
 class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixin {
     late DateTime currentTime;
     late TabController _tabController;
+    
+    
 
   @override
   void initState() {
@@ -368,7 +375,10 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // Navigator.of(context).pop(); // ダイアログを閉じる
+                          widget.onDataSend(4); // 別のページに遷移
+                        },
                         child: const Text(
                           'Jump',
                         ),

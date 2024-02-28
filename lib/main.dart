@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HomePage(onDataSend: onDataReceived),
       const TwitterClone(),
       const Text('Account'),
-      const Timetable(),
+      Timetable(onDataSend: onDataReceived),
       const MapPage(),
     ];
   }
