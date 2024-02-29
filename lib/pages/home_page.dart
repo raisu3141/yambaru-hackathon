@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class HomePage extends StatelessWidget {
   final Function(int) onDataSend;
 
-  const HomePage({Key? key, required this.onDataSend}) : super(key: key);
+  const HomePage({super.key, required this.onDataSend});
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,4 @@
-import 'dart:ffi';
-
-import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
@@ -10,8 +6,7 @@ class MapPage extends StatelessWidget {
   const MapPage({super.key});
 
   @override
-  Widget build(BuildContext context) {    
-
+  Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: SizedBox(
         width: 220.0,
@@ -110,6 +105,20 @@ class MapPage extends StatelessWidget {
                     ).build(),
                     const SizedBox(
                       height: 50.0,
+                      width: 130,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '←メディア棟',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Room(
                       name: '講義室1-1',
@@ -126,7 +135,21 @@ class MapPage extends StatelessWidget {
                       roomid: 1102,
                     ).build(),
                     const SizedBox(
+                      width: 130,
                       height: 150.0,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '正面玄関',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Room(
                       name: '講義室1-3',
@@ -144,6 +167,20 @@ class MapPage extends StatelessWidget {
                     ).build(),
                     const SizedBox(
                       height: 50.0,
+                      width: 130,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '←レストラン',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Room(
                       name: '研究室1-10',
@@ -249,7 +286,31 @@ class MapPage extends StatelessWidget {
                       roomid: 2102,
                     ).build(),
                     const SizedBox(
+                      width: 140,
                       height: 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '夢工場→',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Text(
+                            '男子トイレ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Room(
                       name: 'テクノセンター1-2',
@@ -267,6 +328,20 @@ class MapPage extends StatelessWidget {
                     ).build(),
                     const SizedBox(
                       height: 50,
+                      width: 140,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '女子トイレ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Room(
                       name: '中央機器分析室',
@@ -336,8 +411,6 @@ class Room {
   static const Color occupiedColor = Color(0xFFFF82C4);
   static const Color unavailableColor = Color(0xFFA1AEBE);
 
-
-
   Room({
     required this.name,
     required this.author,
@@ -346,31 +419,34 @@ class Room {
     required this.roomid,
   });
 
-
   Widget build() {
     return FutureBuilder<int>(
       future: isNowused(roomid),
       builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // データが読み込まれるまでの間に表示するウィジェット
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           // エラーが発生した場合に表示するウィジェット
           return Text('Error: ${snapshot.error}');
         } else {
           // データが正常に取得された場合に表示するウィジェット
           int isNowUsedResult = snapshot.data!;
-          if (roomid == 1) { //その他１使用不可
+          if (roomid == 1) {
+            //その他１使用不可
             color = unavailableColor;
-          } else if (roomid == 0) { // その他2 使用中
+          } else if (roomid == 0) {
+            // その他2 使用中
             color = occupiedColor;
           } else {
-            if (isNowUsedResult == 0) { // 科目がない時間・曜日
+            if (isNowUsedResult == 0) {
+              // 科目がない時間・曜日
               color = unavailableColor;
-            } else if (isNowUsedResult == 1){ // 使用中の科目
+            } else if (isNowUsedResult == 1) {
+              // 使用中の科目
               color = occupiedColor;
-            }
-            else if (isNowUsedResult == 2){ // 使用中でない
+            } else if (isNowUsedResult == 2) {
+              // 使用中でない
               color = vacantColor;
             }
           }
@@ -415,13 +491,12 @@ class Room {
     if (now.weekday >= 1 && now.weekday <= 5) {
       nowweekday = now.weekday.toString();
     }
-    String timetablevalue = period + '0' + nowweekday;
-    print('$timetablevalue');
+    String timetablevalue = '${period}0$nowweekday';
+    print(timetablevalue);
 
-    if (period == '0' || nowweekday == '0'){
+    if (period == '0' || nowweekday == '0') {
       return (0);
-    }
-    else {
+    } else {
       DocumentSnapshot subjectDoc = await getSubjectData(timetablevalue);
       int room = subjectDoc['roomid'];
 
@@ -435,8 +510,10 @@ class Room {
 
   Future<DocumentSnapshot> getSubjectData(String timetableValue) async {
     // Firestoreからtimetableコレクションのドキュメントを取得
-    DocumentSnapshot timetableDoc =
-        await FirebaseFirestore.instance.collection('timetable').doc('periods').get();
+    DocumentSnapshot timetableDoc = await FirebaseFirestore.instance
+        .collection('timetable')
+        .doc('periods')
+        .get();
 
     // timetableコレクション内のperiodsフィールドから該当するsubjectsの参照を取得
     DocumentReference subjectRef = timetableDoc[timetableValue];
@@ -450,13 +527,17 @@ class Room {
     int hour = now.hour;
     int minute = now.minute;
 
-    if ((hour == 8 && minute >= 50) || (hour == 9) || (hour == 10 && minute <= 20)) {
+    if ((hour == 8 && minute >= 50) ||
+        (hour == 9) ||
+        (hour == 10 && minute <= 20)) {
       return 1;
     } else if ((hour == 10 && minute >= 30) || (hour == 11 && minute <= 59)) {
       return 2;
     } else if ((hour == 13 && minute >= 10) || (hour == 14 && minute <= 40)) {
       return 3;
-    } else if ((hour == 14 && minute >= 50) || (hour == 15) || (hour == 16 && minute <= 20)) {
+    } else if ((hour == 14 && minute >= 50) ||
+        (hour == 15) ||
+        (hour == 16 && minute <= 20)) {
       return 4;
     } else {
       return 0;
