@@ -22,7 +22,7 @@ class _MyWidgetState extends State<TwitterClone> {
             fit: BoxFit.cover, // 画像をフィットさせる
           ),
         ),
-        title: const Text('試運転ツイッター'),
+        title: const Text('タイムライン'),
       ),
       body: ListView.builder(
         itemCount: tweets.length,

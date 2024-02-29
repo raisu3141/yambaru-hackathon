@@ -362,16 +362,19 @@ class Room {
           int isNowUsedResult = snapshot.data!;
           if (roomid == 1) { //その他１使用不可
             color = unavailableColor;
-          } else if (roomid == 0) { // その他2 使用中
-            color = occupiedColor;
+          } else if (roomid == 0) { // その他2 使用可能
+            color = vacantColor;
           } else {
-            if (isNowUsedResult == 0) { // 科目がない時間・曜日
-              color = unavailableColor;
+            if (isNowUsedResult == 0) { // 休み時間
+              color = vacantColor;
             } else if (isNowUsedResult == 1){ // 使用中の科目
               color = occupiedColor;
             }
             else if (isNowUsedResult == 2){ // 使用中でない
               color = vacantColor;
+            }
+            else if (isNowUsedResult == 9){ // 学校がない曜日・時間
+              color = unavailableColor;
             }
           }
           return Container(
@@ -418,7 +421,7 @@ class Room {
     String timetablevalue = nowweekday + '0' + period;
     print('$timetablevalue');
 
-    if (period == '0' || nowweekday == '0'){
+    if (period == '9' || nowweekday == '0'){
       return (0);
     }
     else {
@@ -458,6 +461,8 @@ class Room {
       return 3;
     } else if ((hour == 14 && minute >= 50) || (hour == 15) || (hour == 16 && minute <= 20)) {
       return 4;
+    } else if ((hour >= 9) || (hour <= 16)){
+      return 9;
     } else {
       return 0;
     }
