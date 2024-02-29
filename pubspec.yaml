@@ -42,6 +42,8 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   image_picker: ^1.0.7
   shared_preferences: ^2.2.2
+  qr_flutter: ^4.1.0
+  barcode_widget: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +101,7 @@ flutter:
     - assets/images/account_icon_selected.png
     - assets/images/nitokc_main_logo.png
     - assets/images/notes.png
+    - assets/images/twitter_logo.png
 
 flutter_icons:
   android: true

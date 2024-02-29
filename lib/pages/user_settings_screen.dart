@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSettingsScreen extends StatefulWidget {
+  const UserSettingsScreen({super.key});
+
   @override
   _UserSettingsScreenState createState() => _UserSettingsScreenState();
 }
@@ -56,7 +58,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ユーザー設定'),
+        title: const Text('ユーザー設定'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,42 +71,42 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                 radius: 50.0,
                 backgroundImage: avatarImage != null
                     ? FileImage(avatarImage!)
-                    : NetworkImage(
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/220px-Logo_of_Twitter.svg.png',
+                    : const NetworkImage(
+                        'https://pbs.twimg.com/profile_images/1761639045296472064/zvcfP8IN_400x400.jpg',
                       ) as ImageProvider<Object>,
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               onChanged: (value) {
                 setState(() {
                   userName = value;
                 });
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'ユーザー名',
               ),
               controller: TextEditingController(text: userName),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               onChanged: (value) {
                 setState(() {
                   userDetail = value;
                 });
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '詳細情報',
               ),
               controller: TextEditingController(text: userDetail),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 _saveUserSettings();
                 Navigator.pop(context);
               },
-              child: Text('保存'),
+              child: const Text('保存'),
             ),
           ],
         ),

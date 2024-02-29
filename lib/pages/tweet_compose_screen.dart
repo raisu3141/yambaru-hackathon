@@ -1,11 +1,11 @@
 // tweet_compose_screen.dart
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class TweetComposeScreen extends StatefulWidget {
+  const TweetComposeScreen({super.key});
+
   @override
-  _TweetComposeScreenState createState() => _TweetComposeScreenState();
+  State<TweetComposeScreen> createState() => _TweetComposeScreenState();
 }
 
 class _TweetComposeScreenState extends State<TweetComposeScreen> {
@@ -17,7 +17,7 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('新しいツイート'),
+        title: const Text('新しいツイート'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -25,35 +25,36 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // ここでメイン画面のユーザーアイコンを表示
-            CircleAvatar(
+            const CircleAvatar(
               radius: 50.0,
+              backgroundColor: Colors.transparent,
               backgroundImage: NetworkImage(
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/220px-Logo_of_Twitter.svg.png',
+                'https://pbs.twimg.com/profile_images/1761639045296472064/zvcfP8IN_400x400.jpg',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: tweetController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'ツイートを入力してください...',
               ),
               maxLines: 5,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: imageUrlController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '画像URLを入力してください...',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: additionalTextController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '追加のテキストを入力してください...',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 // ここで新しいツイートを作成
@@ -70,7 +71,7 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
 
                 Navigator.pop(context, newTweet);
               },
-              child: Text('ツイートする'),
+              child: const Text('ツイートする'),
             ),
           ],
         ),

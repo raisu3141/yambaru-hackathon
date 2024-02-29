@@ -5,6 +5,7 @@ import 'firebase_options.dart';
 
 import 'package:mic_factory/pages/home_page.dart';
 import 'package:mic_factory/pages/map_page.dart';
+import 'package:mic_factory/pages/account_page.dart';
 import 'package:mic_factory/pages/timetable_page.dart';
 import 'package:mic_factory/pages/twitter_page.dart';
 
@@ -54,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _pageWidgets = [
       HomePage(onDataSend: onDataReceived),
       const TwitterClone(),
-      const Text('Account'),
+      const AccountPage(),
       Timetable(onDataSend: onDataReceived),
       const MapPage(),
     ];

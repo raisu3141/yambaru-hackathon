@@ -436,18 +436,21 @@ class Room {
             //その他１使用不可
             color = unavailableColor;
           } else if (roomid == 0) {
-            // その他2 使用中
-            color = occupiedColor;
+            // その他2 使用可能
+            color = vacantColor;
           } else {
             if (isNowUsedResult == 0) {
-              // 科目がない時間・曜日
-              color = unavailableColor;
+              // 休み時間
+              color = vacantColor;
             } else if (isNowUsedResult == 1) {
               // 使用中の科目
               color = occupiedColor;
             } else if (isNowUsedResult == 2) {
               // 使用中でない
               color = vacantColor;
+            } else if (isNowUsedResult == 9) {
+              // 学校がない曜日・時間
+              color = unavailableColor;
             }
           }
           return Container(
@@ -486,15 +489,15 @@ class Room {
 
   Future<int> isNowused(int roomid) async {
     String period = getCurrentPeriod().toString(); //現在何限目か取得
-    DateTime now = DateTime.now().add(const Duration(hours: 9)); //現在時刻を取得
+    DateTime now = DateTime.now(); //現在時刻を取得
     String nowweekday = '0';
     if (now.weekday >= 1 && now.weekday <= 5) {
       nowweekday = now.weekday.toString();
     }
-    String timetablevalue = '${period}0$nowweekday';
+    String timetablevalue = '${nowweekday}0$period';
     print(timetablevalue);
 
-    if (period == '0' || nowweekday == '0') {
+    if (period == '9' || nowweekday == '0') {
       return (0);
     } else {
       DocumentSnapshot subjectDoc = await getSubjectData(timetablevalue);
@@ -523,7 +526,7 @@ class Room {
   }
 
   int getCurrentPeriod() {
-    DateTime now = DateTime.now().add(const Duration(hours: 9)); //現在時刻を取得
+    DateTime now = DateTime.now(); //現在時刻を取得
     int hour = now.hour;
     int minute = now.minute;
 
@@ -539,6 +542,8 @@ class Room {
         (hour == 15) ||
         (hour == 16 && minute <= 20)) {
       return 4;
+    } else if ((hour >= 9) || (hour <= 16)) {
+      return 9;
     } else {
       return 0;
     }
