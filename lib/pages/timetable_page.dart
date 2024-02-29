@@ -349,8 +349,6 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
           String teacher1 = subjectDoc['teacher1'].toString();
           String teacher2 = subjectDoc['teacher2'].toString();
           String classroom = subjectDoc['roomname'].toString();
-          //先生の部屋
-          String senseiroom = '4-1';
 
           return Container(
             child: Row(
@@ -379,9 +377,6 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                             ),
                             Column(
                               children: [
-                                Text(
-                                  '研究室:$senseiroom'
-                                ),
                                 Text(
                                   '講義室:$classroom'
                                 ),
@@ -425,6 +420,12 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
           String teacher1 = subjectDoc['teacher1'].toString();
           String teacher2 = subjectDoc['teacher2'].toString();
           String roomname = subjectDoc['roomname'].toString();
+          Color roomcolor = Color(0xffffffff);
+          Color textcolor = Color(0xFF094D9E);
+          if (isNowused(period)){
+            roomcolor = Color.fromARGB(199, 82, 212, 255);
+            textcolor = Color.fromARGB(255, 39, 50, 249);
+          }
 
           double sizewidth = MediaQuery.of(context).size.width * 0.14;
           double sizeheight = MediaQuery.of(context).size.height * 0.12;
@@ -435,7 +436,7 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                backgroundColor: const Color(0xFFFFFFFF), //背景色
+                backgroundColor: roomcolor, //背景色
                 side: const BorderSide(
                   color: Colors.black,
                   width: 1,
@@ -506,8 +507,8 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(
-                        color: Color(0xFF094D9E),
+                      style: TextStyle(
+                        color: textcolor,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
@@ -562,4 +563,23 @@ class _MyWidgetState extends State<Timetable> with SingleTickerProviderStateMixi
       return 0;
     }
   }
+
+  bool isNowused(String period){
+    String currentPeriod = getCurrentPeriod().toString();
+    DateTime now = DateTime.now().add(const Duration(hours: 9)); //現在時刻を取得
+    String nowweekday = '0';
+    if (now.weekday >= 1 && now.weekday <= 5) {
+      nowweekday = now.weekday.toString();
+    }
+    String timetablevalue = nowweekday + '0' + currentPeriod;
+
+    
+    if (period == timetablevalue){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  
 }

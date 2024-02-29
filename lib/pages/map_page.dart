@@ -415,7 +415,7 @@ class Room {
     if (now.weekday >= 1 && now.weekday <= 5) {
       nowweekday = now.weekday.toString();
     }
-    String timetablevalue = period + '0' + nowweekday;
+    String timetablevalue = nowweekday + '0' + period;
     print('$timetablevalue');
 
     if (period == '0' || nowweekday == '0'){
