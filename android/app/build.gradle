@@ -23,7 +23,8 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-apply from: "../signingConfigs.gradle", to: android
+// 開発のためコメントアウト
+// apply from: "../signingConfigs.gradle", to: android
 
 android {
     namespace "com.example.mic_factory"
@@ -57,7 +58,9 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            // 開発のためコメントアウト
+            // signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug // リリース版では消す
         }
     }
 }
