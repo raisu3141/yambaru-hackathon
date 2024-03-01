@@ -1,5 +1,6 @@
-// tweet_compose_screen.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TweetComposeScreen extends StatefulWidget {
   const TweetComposeScreen({super.key});
@@ -9,9 +10,18 @@ class TweetComposeScreen extends StatefulWidget {
 }
 
 class _TweetComposeScreenState extends State<TweetComposeScreen> {
-  TextEditingController tweetController = TextEditingController();
-  TextEditingController imageUrlController = TextEditingController();
-  TextEditingController additionalTextController = TextEditingController();
+  // TextEditingController tweetController = TextEditingController();
+  // TextEditingController imageUrlController = TextEditingController();
+  // TextEditingController additionalTextController = TextEditingController();
+  String tweettext = '';
+  String imgurl = '';
+  String addtext = '';
+
+  String? userid = FirebaseAuth.instance.currentUser?.uid;
+  DateTime now = DateTime.now();
+  late String code = '$userid$now';
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -34,42 +44,40 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
             ),
             const SizedBox(height: 16.0),
             TextField(
-              controller: tweetController,
               decoration: const InputDecoration(
                 hintText: 'ツイートを入力してください...',
               ),
+              onChanged: (text) {
+                tweettext = text;
+              },
               maxLines: 5,
             ),
             const SizedBox(height: 16.0),
             TextField(
-              controller: imageUrlController,
+              // controller: imageUrlController,
               decoration: const InputDecoration(
                 hintText: '画像URLを入力してください...',
               ),
+              onChanged: (text) {
+                imgurl = text;
+              },
             ),
             const SizedBox(height: 16.0),
             TextField(
-              controller: additionalTextController,
+              // controller: additionalTextController,
               decoration: const InputDecoration(
                 hintText: '追加のテキストを入力してください...',
               ),
+              onChanged: (text) {
+                addtext = text;
+              },
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
-                // ここで新しいツイートを作成
-                final newTweet = Tweet(
-                  username: 'ユーザー名',
-                  tweetText: tweetController.text,
-                  imageUrl: imageUrlController.text,
-                  additionalText: additionalTextController.text,
-                  likeCount: 0,
-                  isLiked: false,
-                  comments: [],
-                  isCommentOpen: false,
-                );
-
-                Navigator.pop(context, newTweet);
+              onPressed: () async {
+                // 新しいツイートをFirestoreに保存
+                await _addtofirebase();
+                Navigator.pop(context);
               },
               child: const Text('ツイートする'),
             ),
@@ -78,40 +86,22 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
       ),
     );
   }
-}
 
-class Tweet {
-  final String username;
-  final String tweetText;
-  final String imageUrl;
-  final String additionalText;
-  int likeCount;
-  bool isLiked;
-  List<Comment> comments;
-  bool isCommentOpen;
+  Future _addtofirebase() async {
+    final db = FirebaseFirestore.instance;
+    // Create a new user with a first and last name
+    final tweet = <String, dynamic>{
+      'userid': userid,
+      'tweetText': tweettext,
+      'imageUrl': imgurl,
+      'additionalText': addtext,
+      'likeCount': 0,
+      'comments': [],
+      'timestamp': FieldValue.serverTimestamp(),
+      'tweetid': code,
+    };
 
-  Tweet({
-    required this.username,
-    required this.tweetText,
-    required this.imageUrl,
-    required this.additionalText,
-    this.likeCount = 0,
-    this.isLiked = false,
-    this.comments = const [],
-    this.isCommentOpen = false,
-  });
-}
-
-class Comment {
-  final String username;
-  final String text;
-  int likeCount;
-  bool isLiked;
-
-  Comment({
-    required this.username,
-    required this.text,
-    this.likeCount = 0,
-    this.isLiked = false,
-  });
+    // Add a new document with a generated ID
+    await db.collection("tweets").doc(code).set(tweet);
+  }
 }

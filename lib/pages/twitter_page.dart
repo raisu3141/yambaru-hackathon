@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mic_factory/pages/tweet_compose_screen.dart';
 import 'package:mic_factory/pages/user_settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +22,14 @@ class _TwitterCloneState extends State<TwitterClone> {
   void initState() {
     super.initState();
     _loadMainUserInfo();
+    _fetchTweets();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
   }
 
   _loadMainUserInfo() async {
@@ -28,6 +39,50 @@ class _TwitterCloneState extends State<TwitterClone> {
       mainAvatarImagePath = prefs.getString('avatarImagePath') ??
           "https://pbs.twimg.com/profile_images/1761639045296472064/zvcfP8IN_400x400.jpg";
     });
+  }
+
+  Future<void> _fetchTweets() async {
+    // Firestoreのインスタンスを取得
+    final db = FirebaseFirestore.instance;
+
+    try {
+      // "Tweets"コレクションへの参照を取得
+      final tweetsCollection = db.collection("tweets");
+      print("Tweetsコレクションへの参照を取得しました");
+
+      // コレクション内のすべてのドキュメントを取得
+      final snapshot = await tweetsCollection.get();
+      print("ドキュメントを取得しました");
+
+      // ドキュメントのリストを反復処理
+      for (var doc in snapshot.docs) {
+        // ドキュメントのデータを取得してTweetオブジェクトを作成
+        final tweet = Tweet(
+          userid: doc['userid'],
+          tweetText: doc['tweetText'],
+          imageUrl: doc['imageUrl'],
+          additionalText: doc['additionalText'],
+          likeCount: doc['likeCount'],
+          code: doc['tweetid'],
+          // isLiked: false,
+          // comments: [],
+          // isCommentOpen: false,
+        );
+        print("Tweetオブジェクトを作成しました");
+
+        // 作成したTweetオブジェクトをtweetsリストに追加
+        tweets.add(tweet);
+        print("Tweetをリストに追加しました");
+      }
+
+      // データをフェッチしてリストが更新されたことを通知
+      setState(() {
+        print("データのフェッチが完了しました");
+      });
+    } catch (e) {
+      // エラー処理
+      print("Error fetching data: $e");
+    }
   }
 
   @override
@@ -50,7 +105,7 @@ class _TwitterCloneState extends State<TwitterClone> {
             backgroundImage: NetworkImage(mainAvatarImagePath),
           ),
         ),
-        title: const Text('試運転ツイッター'),
+        title: const Text('学内SNS'),
       ),
       body: ListView.builder(
         itemCount: tweets.length,
@@ -73,12 +128,7 @@ class _TwitterCloneState extends State<TwitterClone> {
               builder: (context) => const TweetComposeScreen(),
             ),
           );
-
-          if (newTweet != null) {
-            setState(() {
-              tweets.add(newTweet);
-            });
-          }
+          _fetchTweets();
         },
         child: const Icon(Icons.add),
       ),
@@ -87,20 +137,22 @@ class _TwitterCloneState extends State<TwitterClone> {
 }
 
 class Tweet {
-  final String username;
+  final String userid;
   final String tweetText;
   final String imageUrl;
   final String additionalText;
+  final String code;
   int likeCount;
   bool isLiked;
   List<Comment> comments;
   bool isCommentOpen;
 
   Tweet({
-    required this.username,
+    required this.userid,
     required this.tweetText,
     required this.imageUrl,
     required this.additionalText,
+    required this.code,
     this.likeCount = 0,
     this.isLiked = false,
     this.comments = const [],
@@ -133,8 +185,73 @@ class TweetCard extends StatefulWidget {
   _TweetCardState createState() => _TweetCardState();
 }
 
+class FirestoreService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<Map<String, dynamic>> fetchUserData(String collectionName) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await _firestore.collection('userset').doc(collectionName).get();
+
+      if (documentSnapshot.exists) {
+        final userData = documentSnapshot.data()!;
+        return {
+          'username': userData['username'],
+          //  'detail': userData['userdatail'],
+        };
+      } else {
+        throw Exception('Document does not exist');
+      }
+    } catch (e) {
+      throw Exception('Error fetching user data: $e');
+    }
+  }
+
+  Future<void> incrementFieldValue(String documentId) async {
+    try {
+      // 指定されたドキュメントの参照を取得
+      final documentReference = _firestore.collection('tweets').doc(documentId);
+
+      // フィールドの値をインクリメント
+      await documentReference.update({
+        'likeCount': FieldValue.increment(1),
+      });
+    } catch (e) {
+      print('Error updating field: $e');
+    }
+  }
+}
+
 class _TweetCardState extends State<TweetCard> {
   final commentController = TextEditingController();
+  String name = '';
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  void fetchUserData() async {
+    try {
+      FirestoreService firestoreService = FirestoreService();
+      final userData =
+          await firestoreService.fetchUserData(widget.tweet.userid);
+      setState(() {
+        name = userData['username']; // 取得したユーザー名をセット
+      });
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+  void incrementFieldValue(String documentId) async {
+    try {
+      FirestoreService firestoreService = FirestoreService();
+      firestoreService.incrementFieldValue(widget.tweet.code);
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +264,7 @@ class _TweetCardState extends State<TweetCard> {
               backgroundColor: Colors.transparent,
               backgroundImage: NetworkImage('https://placekitten.com/100/100'),
             ),
-            title: Text(widget.tweet.username),
+            title: Text(name),
             subtitle: Text(widget.tweet.tweetText),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -165,7 +282,7 @@ class _TweetCardState extends State<TweetCard> {
                       if (widget.tweet.isLiked) {
                         widget.tweet.likeCount--;
                       } else {
-                        widget.tweet.likeCount++;
+                        incrementFieldValue(widget.tweet.code);
                       }
                       widget.tweet.isLiked = !widget.tweet.isLiked;
                     });
@@ -283,71 +400,73 @@ class _CommentWidgetState extends State<CommentWidget> {
   }
 }
 
-class TweetComposeScreen extends StatefulWidget {
-  const TweetComposeScreen({super.key});
+// class TweetComposeScreen extends StatefulWidget {
+//   const TweetComposeScreen({super.key});
 
-  @override
-  _TweetComposeScreenState createState() => _TweetComposeScreenState();
-}
+//   @override
+//   _TweetComposeScreenState createState() => _TweetComposeScreenState();
+// }
 
-class _TweetComposeScreenState extends State<TweetComposeScreen> {
-  TextEditingController tweetController = TextEditingController();
-  TextEditingController imageUrlController = TextEditingController();
-  TextEditingController additionalTextController = TextEditingController();
+// class _TweetComposeScreenState extends State<TweetComposeScreen> {
+//   TextEditingController tweetController = TextEditingController();
+//   TextEditingController imageUrlController = TextEditingController();
+//   TextEditingController additionalTextController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('新しいツイート'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: tweetController,
-              decoration: const InputDecoration(
-                hintText: 'ツイートを入力してください...',
-              ),
-              maxLines: 5,
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: imageUrlController,
-              decoration: const InputDecoration(
-                hintText: '画像URLを入力してください...',
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: additionalTextController,
-              decoration: const InputDecoration(
-                hintText: '追加のテキストを入力してください...',
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                final newTweet = Tweet(
-                  username: 'ユーザー名',
-                  tweetText: tweetController.text,
-                  imageUrl: imageUrlController.text,
-                  additionalText: additionalTextController.text,
-                  likeCount: 0,
-                  isLiked: false,
-                  comments: [],
-                  isCommentOpen: false,
-                );
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('新しいツイート'),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             TextField(
+//               controller: tweetController,
+//               decoration: const InputDecoration(
+//                 hintText: 'ツイートを入力してください...',
+//               ),
+//               maxLines: 5,
+//             ),
+//             const SizedBox(height: 16.0),
+//             TextField(
+//               controller: imageUrlController,
+//               decoration: const InputDecoration(
+//                 hintText: '画像URLを入力してください...',
+//               ),
+//             ),
+//             const SizedBox(height: 16.0),
+//             TextField(
+//               controller: additionalTextController,
+//               decoration: const InputDecoration(
+//                 hintText: '追加のテキストを入力してください...',
+//               ),
+//             ),
+//             const SizedBox(height: 16.0),
+//             ElevatedButton(
+//               onPressed: () {
+//                 final newTweet = Tweet(
+//                   username: 'ユーザー名',
+//                   tweetText: tweetController.text,
+//                   imageUrl: imageUrlController.text,
+//                   additionalText: additionalTextController.text,
+//                   likeCount: 0,
+//                   isLiked: false,
+//                   comments: [],
+//                   isCommentOpen: false,
+//                 );
 
-                Navigator.pop(context, newTweet);
-              },
-              child: const Text('ツイートする'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//                 Navigator.pop(context, newTweet);
+//               },
+//               child: const Text('ツイートする'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+

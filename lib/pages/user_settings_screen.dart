@@ -1,5 +1,7 @@
 // user_settings_screen.dart
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,9 +15,11 @@ class UserSettingsScreen extends StatefulWidget {
 
 class _UserSettingsScreenState extends State<UserSettingsScreen> {
   late SharedPreferences prefs;
-  String userName = "ユーザー名";
-  String userDetail = "詳細情報";
+  String userName = "";
+  String userDetail = "";
   File? avatarImage;
+
+  String? userid = FirebaseAuth.instance.currentUser?.uid;
 
   @override
   void initState() {
@@ -46,13 +50,6 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
     });
   }
 
-  _saveUserSettings() async {
-    await prefs.setString('userName', userName);
-    await prefs.setString('userDetail', userDetail);
-    if (avatarImage != null) {
-      await prefs.setString('avatarImagePath', avatarImage!.path);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,32 +75,32 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
             ),
             const SizedBox(height: 16.0),
             TextField(
-              onChanged: (value) {
+              onChanged: (text) {
                 setState(() {
-                  userName = value;
+                  userName = text;
                 });
               },
               decoration: const InputDecoration(
                 hintText: 'ユーザー名',
               ),
-              controller: TextEditingController(text: userName),
+              // controller: TextEditingController(text: userName),
             ),
             const SizedBox(height: 16.0),
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  userDetail = value;
-                });
-              },
-              decoration: const InputDecoration(
-                hintText: '詳細情報',
-              ),
-              controller: TextEditingController(text: userDetail),
-            ),
+            // TextField(
+            //   onChanged: (text) {
+            //     setState(() {
+            //       userDetail = text;
+            //     });
+            //   },
+            //   decoration: const InputDecoration(
+            //     hintText: '詳細情報',
+            //   ),
+            //   // controller: TextEditingController(text: userDetail),
+            // ),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
-                _saveUserSettings();
+                _addtofirebase();
                 Navigator.pop(context);
               },
               child: const Text('保存'),
@@ -112,5 +109,19 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
         ),
       ),
     );
+  }
+
+  Future _addtofirebase() async{
+    final db = FirebaseFirestore.instance;
+    // Create a new user with a first and last name
+    final userset = <String, dynamic>{
+      'userid': userid,
+      'username': userName,
+      'userdetail': userDetail,
+    };
+
+    // Add a new document with a generated ID
+    await db.collection("userset").doc(userid).set(userset);
+
   }
 }
