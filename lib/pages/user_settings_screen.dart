@@ -86,17 +86,17 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
               // controller: TextEditingController(text: userName),
             ),
             const SizedBox(height: 16.0),
-            TextField(
-              onChanged: (text) {
-                setState(() {
-                  userDetail = text;
-                });
-              },
-              decoration: const InputDecoration(
-                hintText: '詳細情報',
-              ),
-              // controller: TextEditingController(text: userDetail),
-            ),
+            // TextField(
+            //   onChanged: (text) {
+            //     setState(() {
+            //       userDetail = text;
+            //     });
+            //   },
+            //   decoration: const InputDecoration(
+            //     hintText: '詳細情報',
+            //   ),
+            //   // controller: TextEditingController(text: userDetail),
+            // ),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {

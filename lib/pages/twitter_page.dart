@@ -41,32 +41,49 @@ class _TwitterCloneState extends State<TwitterClone> {
     });
   }
 
-   Future<void> _fetchTweets() async {
-    try {
-      // Firestoreのコレクション"Tweets"からドキュメントを取得
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('Tweets').get();
+Future<void> _fetchTweets() async {
+  // Firestoreのインスタンスを取得
+  final db = FirebaseFirestore.instance;
 
-      // ドキュメントのデータを元にTweetオブジェクトを作成し、リストに追加
-      querySnapshot.docs.forEach((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        Tweet tweet = Tweet(
-          username: data['username'],
-          tweetText: data['tweetText'],
-          imageUrl: data['imageurl'],
-          additionalText: data['additionalText'],
-          likeCount: data['likeCount'],
-          comments: data['comments'],
-        );
-        tweets.add(tweet);
-      });
+  try {
+    // "Tweets"コレクションへの参照を取得
+    final tweetsCollection = db.collection("tweets");
+    print("Tweetsコレクションへの参照を取得しました");
 
-      // ステートを更新してウィジェットを再構築
-      setState(() {});
-    } catch (e) {
-      print('Error fetching tweets: $e');
+    // コレクション内のすべてのドキュメントを取得
+    final snapshot = await tweetsCollection.get();
+    print("ドキュメントを取得しました");
+
+    // ドキュメントのリストを反復処理
+    for (var doc in snapshot.docs) {
+      // ドキュメントのデータを取得してTweetオブジェクトを作成
+      final tweet = Tweet(
+        userid: doc['userid'],
+        tweetText: doc['tweetText'],
+        imageUrl: doc['imageUrl'],
+        additionalText: doc['additionalText'],
+        likeCount: doc['likeCount'],
+        // isLiked: false,
+        // comments: [],
+        // isCommentOpen: false,
+      );
+      print("Tweetオブジェクトを作成しました");
+
+      // 作成したTweetオブジェクトをtweetsリストに追加
+      tweets.add(tweet);
+      print("Tweetをリストに追加しました");
     }
+
+    // データをフェッチしてリストが更新されたことを通知
+    setState(() {
+      print("データのフェッチが完了しました");
+    });
+  } catch (e) {
+    // エラー処理
+    print("Error fetching data: $e");
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +137,7 @@ class _TwitterCloneState extends State<TwitterClone> {
 }
 
 class Tweet {
-  final String username;
+  final String userid;
   final String tweetText;
   final String imageUrl;
   final String additionalText;
@@ -130,7 +147,7 @@ class Tweet {
   bool isCommentOpen;
 
   Tweet({
-    required this.username,
+    required this.userid,
     required this.tweetText,
     required this.imageUrl,
     required this.additionalText,
@@ -155,6 +172,7 @@ class Comment {
   });
 }
 
+
 class TweetCard extends StatefulWidget {
   final Tweet tweet;
   final VoidCallback onCommentToggle;
@@ -164,13 +182,65 @@ class TweetCard extends StatefulWidget {
 
   @override
   _TweetCardState createState() => _TweetCardState();
+
+  
 }
+
+class FirestoreService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String? userid = FirebaseAuth.instance.currentUser?.uid;
+
+  Future<Map<String, dynamic>> fetchUserData(String collectionName) async {
+    try {
+      if (userid == null) {
+        throw Exception('User ID is null');
+      }
+
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await _firestore.collection('userset').doc(collectionName).get();
+
+      if (documentSnapshot.exists) {
+        final userData = documentSnapshot.data()!;
+        return {
+          'username': userData['username'],
+         //  'detail': userData['userdatail'],
+        };
+      } else {
+        throw Exception('Document does not exist');
+      }
+    } catch (e) {
+      throw Exception('Error fetching user data: $e');
+    }
+  }
+}
+
 
 class _TweetCardState extends State<TweetCard> {
   final commentController = TextEditingController();
+  String name = '';
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
 
+  void fetchUserData() async {
+    try {
+      FirestoreService firestoreService = FirestoreService();
+      final userData = await firestoreService.fetchUserData(widget.tweet.userid);
+      setState(() {
+        name = userData['username']; // 取得したユーザー名をセット
+      });
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+  
   @override
   Widget build(BuildContext context) {
+     
+    
+
     return Card(
       margin: const EdgeInsets.all(8.0),
       child: Column(
@@ -180,7 +250,7 @@ class _TweetCardState extends State<TweetCard> {
               backgroundColor: Colors.transparent,
               backgroundImage: NetworkImage('https://placekitten.com/100/100'),
             ),
-            title: Text(widget.tweet.username),
+            title: Text(name),
             subtitle: Text(widget.tweet.tweetText),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -276,6 +346,7 @@ class _TweetCardState extends State<TweetCard> {
     );
   }
 }
+
 
 class CommentWidget extends StatefulWidget {
   final Comment comment;
