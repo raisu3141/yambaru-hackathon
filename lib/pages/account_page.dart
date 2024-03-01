@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:mic_factory/pages/auth.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class AccountPage extends StatefulWidget {
@@ -12,11 +14,22 @@ class _AccountPageState extends State<AccountPage> {
   int code = 249999;
   DateTime now = DateTime.now();
   late String _codeString = '$code $now';
+  bool loginstate = false;
 
   void _generateCode() {
     setState(() {
       now = DateTime.now();
       _codeString = '$code $now';
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      setState(() {
+        loginstate = user != null;
+      });
     });
   }
 
@@ -31,6 +44,29 @@ class _AccountPageState extends State<AccountPage> {
             Center(
               child: Column(
                 children: [
+                  Row(
+                    children: [
+                      Spacer(),
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginPage()), // ログインページの呼び出し
+                          );
+                        },
+                        label: Text(
+                          loginstate ? 'ログイン中' : 'ログインする',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        icon: loginstate ? Icon(Icons.face) : Icon(Icons.login),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0), // ボタンの形状を設定
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                    ],
+                  ),
+                  SizedBox(height: 16,),
                   const Text(
                     '学生証QRコード',
                     style: TextStyle(

@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mic_factory/pages/tweet_compose_screen.dart';
 import 'package:mic_factory/pages/user_settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +21,13 @@ class _TwitterCloneState extends State<TwitterClone> {
   void initState() {
     super.initState();
     _loadMainUserInfo();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
   }
 
   _loadMainUserInfo() async {
@@ -283,71 +292,71 @@ class _CommentWidgetState extends State<CommentWidget> {
   }
 }
 
-class TweetComposeScreen extends StatefulWidget {
-  const TweetComposeScreen({super.key});
+// class TweetComposeScreen extends StatefulWidget {
+//   const TweetComposeScreen({super.key});
 
-  @override
-  _TweetComposeScreenState createState() => _TweetComposeScreenState();
-}
+//   @override
+//   _TweetComposeScreenState createState() => _TweetComposeScreenState();
+// }
 
-class _TweetComposeScreenState extends State<TweetComposeScreen> {
-  TextEditingController tweetController = TextEditingController();
-  TextEditingController imageUrlController = TextEditingController();
-  TextEditingController additionalTextController = TextEditingController();
+// class _TweetComposeScreenState extends State<TweetComposeScreen> {
+//   TextEditingController tweetController = TextEditingController();
+//   TextEditingController imageUrlController = TextEditingController();
+//   TextEditingController additionalTextController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('新しいツイート'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: tweetController,
-              decoration: const InputDecoration(
-                hintText: 'ツイートを入力してください...',
-              ),
-              maxLines: 5,
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: imageUrlController,
-              decoration: const InputDecoration(
-                hintText: '画像URLを入力してください...',
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: additionalTextController,
-              decoration: const InputDecoration(
-                hintText: '追加のテキストを入力してください...',
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                final newTweet = Tweet(
-                  username: 'ユーザー名',
-                  tweetText: tweetController.text,
-                  imageUrl: imageUrlController.text,
-                  additionalText: additionalTextController.text,
-                  likeCount: 0,
-                  isLiked: false,
-                  comments: [],
-                  isCommentOpen: false,
-                );
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('新しいツイート'),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             TextField(
+//               controller: tweetController,
+//               decoration: const InputDecoration(
+//                 hintText: 'ツイートを入力してください...',
+//               ),
+//               maxLines: 5,
+//             ),
+//             const SizedBox(height: 16.0),
+//             TextField(
+//               controller: imageUrlController,
+//               decoration: const InputDecoration(
+//                 hintText: '画像URLを入力してください...',
+//               ),
+//             ),
+//             const SizedBox(height: 16.0),
+//             TextField(
+//               controller: additionalTextController,
+//               decoration: const InputDecoration(
+//                 hintText: '追加のテキストを入力してください...',
+//               ),
+//             ),
+//             const SizedBox(height: 16.0),
+//             ElevatedButton(
+//               onPressed: () {
+//                 final newTweet = Tweet(
+//                   username: 'ユーザー名',
+//                   tweetText: tweetController.text,
+//                   imageUrl: imageUrlController.text,
+//                   additionalText: additionalTextController.text,
+//                   likeCount: 0,
+//                   isLiked: false,
+//                   comments: [],
+//                   isCommentOpen: false,
+//                 );
 
-                Navigator.pop(context, newTweet);
-              },
-              child: const Text('ツイートする'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//                 Navigator.pop(context, newTweet);
+//               },
+//               child: const Text('ツイートする'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
