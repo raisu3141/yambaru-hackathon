@@ -63,6 +63,7 @@ Future<void> _fetchTweets() async {
         imageUrl: doc['imageUrl'],
         additionalText: doc['additionalText'],
         likeCount: doc['likeCount'],
+        code: doc['tweetid'],
         // isLiked: false,
         // comments: [],
         // isCommentOpen: false,
@@ -141,6 +142,7 @@ class Tweet {
   final String tweetText;
   final String imageUrl;
   final String additionalText;
+  final String code;
   int likeCount;
   bool isLiked;
   List<Comment> comments;
@@ -151,6 +153,7 @@ class Tweet {
     required this.tweetText,
     required this.imageUrl,
     required this.additionalText,
+    required this.code,
     this.likeCount = 0,
     this.isLiked = false,
     this.comments = const [],
@@ -188,13 +191,9 @@ class TweetCard extends StatefulWidget {
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String? userid = FirebaseAuth.instance.currentUser?.uid;
 
   Future<Map<String, dynamic>> fetchUserData(String collectionName) async {
     try {
-      if (userid == null) {
-        throw Exception('User ID is null');
-      }
 
       final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
           await _firestore.collection('userset').doc(collectionName).get();
@@ -210,6 +209,20 @@ class FirestoreService {
       }
     } catch (e) {
       throw Exception('Error fetching user data: $e');
+    }
+  }
+
+  Future<void> incrementFieldValue(String documentId) async {
+    try {
+      // 指定されたドキュメントの参照を取得
+      final documentReference = _firestore.collection('tweets').doc(documentId);
+      
+      // フィールドの値をインクリメント
+      await documentReference.update({
+        'likeCount': FieldValue.increment(1),
+      });
+    } catch (e) {
+      print('Error updating field: $e');
     }
   }
 }
@@ -230,6 +243,14 @@ class _TweetCardState extends State<TweetCard> {
       setState(() {
         name = userData['username']; // 取得したユーザー名をセット
       });
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+  void incrementFieldValue(String documentId) async {
+    try {
+      FirestoreService firestoreService = FirestoreService();
+      firestoreService.incrementFieldValue(widget.tweet.code);
     } catch (error) {
       print('Error: $error');
     }
@@ -268,7 +289,7 @@ class _TweetCardState extends State<TweetCard> {
                       if (widget.tweet.isLiked) {
                         widget.tweet.likeCount--;
                       } else {
-                        widget.tweet.likeCount++;
+                        incrementFieldValue(widget.tweet.code);
                       }
                       widget.tweet.isLiked = !widget.tweet.isLiked;
                     });

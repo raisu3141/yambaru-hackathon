@@ -98,6 +98,7 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
       'likeCount': 0,
       'comments': [],
       'timestamp': FieldValue.serverTimestamp(),
+      'tweetid' : code,
     };
 
     // Add a new document with a generated ID
