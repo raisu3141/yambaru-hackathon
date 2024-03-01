@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mic_factory/pages/tweet_compose_screen.dart';
@@ -21,6 +22,7 @@ class _TwitterCloneState extends State<TwitterClone> {
   void initState() {
     super.initState();
     _loadMainUserInfo();
+    _fetchTweets();
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
         print('User is currently signed out!');
@@ -37,6 +39,33 @@ class _TwitterCloneState extends State<TwitterClone> {
       mainAvatarImagePath = prefs.getString('avatarImagePath') ??
           "https://pbs.twimg.com/profile_images/1761639045296472064/zvcfP8IN_400x400.jpg";
     });
+  }
+
+   Future<void> _fetchTweets() async {
+    try {
+      // Firestoreのコレクション"Tweets"からドキュメントを取得
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('Tweets').get();
+
+      // ドキュメントのデータを元にTweetオブジェクトを作成し、リストに追加
+      querySnapshot.docs.forEach((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        Tweet tweet = Tweet(
+          username: data['username'],
+          tweetText: data['tweetText'],
+          imageUrl: data['imageurl'],
+          additionalText: data['additionalText'],
+          likeCount: data['likeCount'],
+          comments: data['comments'],
+        );
+        tweets.add(tweet);
+      });
+
+      // ステートを更新してウィジェットを再構築
+      setState(() {});
+    } catch (e) {
+      print('Error fetching tweets: $e');
+    }
   }
 
   @override
@@ -82,12 +111,7 @@ class _TwitterCloneState extends State<TwitterClone> {
               builder: (context) => const TweetComposeScreen(),
             ),
           );
-
-          if (newTweet != null) {
-            setState(() {
-              tweets.add(newTweet);
-            });
-          }
+          _fetchTweets();
         },
         child: const Icon(Icons.add),
       ),
@@ -360,3 +384,5 @@ class _CommentWidgetState extends State<CommentWidget> {
 //     );
 //   }
 // }
+
+

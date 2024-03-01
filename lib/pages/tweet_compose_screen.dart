@@ -91,14 +91,12 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
     final db = FirebaseFirestore.instance;
     // Create a new user with a first and last name
     final tweet = <String, dynamic>{
-      'username': userid,
+      'userid': userid,
       'tweetText': tweettext,
       'imageUrl': imgurl,
       'additionalText': addtext,
       'likeCount': 0,
-      'isLiked': false,
       'comments': [],
-      'isCommentOpen': false,
       'timestamp': FieldValue.serverTimestamp(),
     };
 

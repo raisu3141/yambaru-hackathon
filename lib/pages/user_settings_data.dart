@@ -12,3 +12,5 @@ class UserSettingsData {
     this.avatarImage,
   });
 }
+
+
