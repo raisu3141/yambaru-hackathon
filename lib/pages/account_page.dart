@@ -46,27 +46,37 @@ class _AccountPageState extends State<AccountPage> {
                 children: [
                   Row(
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       FloatingActionButton.extended(
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => LoginPage()), // ログインページの呼び出し
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const LoginPage()), // ログインページの呼び出し
                           );
                         },
                         label: Text(
                           loginstate ? 'ログイン中' : 'ログインする',
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
-                        icon: loginstate ? Icon(Icons.face) : Icon(Icons.login),
+                        icon: loginstate
+                            ? const Icon(Icons.face)
+                            : const Icon(Icons.login),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0), // ボタンの形状を設定
                         ),
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFF094D9E),
                       ),
-                      SizedBox(width: 10,),
+                      const SizedBox(
+                        width: 10,
+                      ),
                     ],
                   ),
-                  SizedBox(height: 16,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   const Text(
                     '学生証QRコード',
                     style: TextStyle(

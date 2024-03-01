@@ -19,7 +19,7 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
 
   String? userid = FirebaseAuth.instance.currentUser?.uid;
   DateTime now = DateTime.now();
-  late String code = '$userid' + '_' + '$now';
+  late String code = '$userid$now';
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -48,7 +48,7 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
                 hintText: 'ツイートを入力してください...',
               ),
               onChanged: (text) {
-                tweettext = text;                
+                tweettext = text;
               },
               maxLines: 5,
             ),
@@ -59,7 +59,7 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
                 hintText: '画像URLを入力してください...',
               ),
               onChanged: (text) {
-                imgurl = text;                
+                imgurl = text;
               },
             ),
             const SizedBox(height: 16.0),
@@ -69,12 +69,12 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
                 hintText: '追加のテキストを入力してください...',
               ),
               onChanged: (text) {
-                addtext = text;                
+                addtext = text;
               },
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () async{
+              onPressed: () async {
                 // 新しいツイートをFirestoreに保存
                 await _addtofirebase();
                 Navigator.pop(context);
@@ -87,7 +87,7 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
     );
   }
 
-  Future _addtofirebase() async{
+  Future _addtofirebase() async {
     final db = FirebaseFirestore.instance;
     // Create a new user with a first and last name
     final tweet = <String, dynamic>{
@@ -98,11 +98,10 @@ class _TweetComposeScreenState extends State<TweetComposeScreen> {
       'likeCount': 0,
       'comments': [],
       'timestamp': FieldValue.serverTimestamp(),
-      'tweetid' : code,
+      'tweetid': code,
     };
 
     // Add a new document with a generated ID
     await db.collection("tweets").doc(code).set(tweet);
-
   }
 }

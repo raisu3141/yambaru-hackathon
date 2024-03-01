@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -27,12 +27,12 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         // AppBarに戻るボタンを追加する
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text('ログインページ'),
+        title: const Text('ログインページ'),
       ),
       body: Center(
         child: Container(
@@ -68,8 +68,9 @@ class _LoginPageState extends State<LoginPage> {
                             .createUserWithEmailAndPassword(
                                 email: _email, password: _password))
                         .user;
-                    if (user != null)
+                    if (user != null) {
                       print("ユーザ登録しました ${user.email} , ${user.uid}");
+                    }
                   } catch (e) {
                     print(e);
                   }
@@ -85,8 +86,9 @@ class _LoginPageState extends State<LoginPage> {
                             .signInWithEmailAndPassword(
                                 email: _email, password: _password))
                         .user;
-                    if (user != null)
+                    if (user != null) {
                       print("ログインしました　${user.email} , ${user.uid}");
+                    }
                   } catch (e) {
                     print(e);
                   }
@@ -118,7 +120,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +135,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -142,6 +144,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return LoginPage(); // LoginPageを表示する
+    return const LoginPage(); // LoginPageを表示する
   }
 }
